@@ -61,3 +61,26 @@ def create_instance(project, zone, instance_name, machine_type):
         zone=zone,
         body=config).execute()
     return opertion_dict
+
+
+project = ''
+zone = 'us-east1-b'
+instance_name = 'test-hello'
+machine_type = 'n1-standard-1'
+operation_dict = create_instance(project, zone, instance_name, machine_type)
+print(operation_dict)
+
+{'id': '8161888622962362325',
+ 'insertTime': '2019-08-14T23:18:34.906-07:00',
+ 'kind': 'compute#operation',
+ 'name': 'operation-1565849913334-59021d7db1c98-1e849860-a2e7df08',
+ 'operationType': 'insert',
+ 'progress': 0,
+ 'selfLink': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b/operations/operation-1565849913334-59021d7db1c98-1e849860-a2e7df08',
+ 'startTime': '2019-08-14T23:18:34.910-07:00',
+ 'status': 'RUNNING',
+ 'targetId': '9070425509174265814',
+ 'targetLink': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b/instances/test-hello',
+ 'user': 'instance-service-account@hello-project.iam.gserviceaccount.com',
+ 'zone': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b'
+ }
