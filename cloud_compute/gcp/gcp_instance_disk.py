@@ -7,9 +7,9 @@
 from enum import Enum
 
 
-class DiskType(Enum):
+class DiskLifeType(Enum):
     PERSISTENT = 'PERSISTENT'  # default
-    SCRATCH = 'SCRATCH'
+    SCRATCH = 'SCRATCH'  # tied to instance's lifecycle
 
 
 class DiskMode(Enum):
@@ -24,15 +24,19 @@ class DiskInerface(Enum):
     NVME = 'NVME'
 
 
-def create_config_bootdisk_from_image(
+class DiskType(Enum):
+    PD_STANDARD = 'pd-standard'
+    PD_SSD = 'pd-ssd'
+    # Local SSDs cannot be used as boot devices
+    LOCAL_SSD = 'local-ssd'
+
+
+def create_config_pd_bootdisk_from_image(
     sourceImage,
     diskName,
     diskSizeGb=10,
     autoDelete=True,
-    # using Enum
-    diskType=DiskType.PERSISTENT,
-    diskMode=DiskMode.READ_WRITE,
-    diskInterface=DiskInerface.SCSI,
+    diskType=DiskType.PD_STANDARD
 ):
     """
     create config for bootdisk from image
@@ -42,19 +46,18 @@ def create_config_bootdisk_from_image(
     assert type(diskSizeGb) is int
     assert type(autoDelete) is bool
     assert type(diskType) is DiskType
-    assert type(diskMode) is DiskMode
-    assert type(diskInterface) is DiskInerface
 
     config = {
         'boot': True,
         'autoDelete': autoDelete,
-        'diskType': diskType.value,
-        'mode': diskMode.value,
-        'interface': diskInterface.value,
+        'type': DiskLifeType.PERSISTENT.value,
+        'mode': DiskMode.READ_WRITE.value,
+        'interface': DiskInerface.SCSI.value,
         'initializeParams': {
             'sourceImage': sourceImage,
             'diskName': diskName,
-            'diskSizeGb': diskSizeGb
+            'diskSizeGb': diskSizeGb,
+            'DiskType': diskType.value
         }
     }
 
@@ -62,8 +65,9 @@ def create_config_bootdisk_from_image(
 
 
 __all__ = (
-    'DiskType',
+    'DiskLifeType',
     'DiskMode',
     'DiskInerface',
-    'create_config_bootdisk_from_image',
+    'DiskType',
+    'create_config_pd_bootdisk_from_image',
 )
