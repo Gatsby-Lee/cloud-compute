@@ -17,7 +17,9 @@ requires = [
     'google-api-python-client',
 ]
 
-test_requires = []
+test_requires = [
+    'pytest',
+]
 
 dev_requires = test_requires + [
     'wheel',

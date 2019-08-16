@@ -1,22 +1,32 @@
 """
 :author: Gatsby Lee
 :since: 2019-08-13
+
+@ref: https://cloud.google.com/compute/docs/reference/rest/v1/instances
 """
+
+import logging
+import json
+
 from cloud_compute.gcp import get_compute_engine_service
+
+LOGGER = logging.getLogger(__name__)
 
 # e.g.) zones/us-east1-b/machineTypes/n1-standard-1
 TEMPLATE_MACHINE_TYPE = 'zones/{}/machineTypes/{}'
 
-# ref: https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/compute/api/create_instance.py
+
+def delete_instance(project, zone, instance_name, service=None):
+    _service = service or get_compute_engine_service()
+    LOGGER.info('Deleting instance=%s from project=%s, zone=%s',
+                instance_name, project, zone)
+    return _service.instances().delete(
+        project=project, zone=zone, instance=instance_name).execute()
 
 
-def create_instance(project, zone, instance_name, machine_type):
-    service = get_compute_engine_service()
+def create_instance(project, zone, instance_name, machine_type, disk_list, service=None):
 
-    # Get the latest Debian Jessie image.
-    image_response = service.images().getFromFamily(
-        project='debian-cloud', family='debian-9').execute()
-    source_disk_image = image_response['selfLink']
+    _service = service or get_compute_engine_service()
 
     # Configure the machine
     machine_type = TEMPLATE_MACHINE_TYPE.format(zone, machine_type)
@@ -24,15 +34,7 @@ def create_instance(project, zone, instance_name, machine_type):
     config = {
         'name': instance_name,
         'machineType': machine_type,
-        'disks': [
-            {
-                'boot': True,
-                'autoDelete': True,
-                'initializeParams': {
-                    'sourceImage': source_disk_image,
-                }
-            }
-        ],
+        'disks': disk_list,
         'networkInterfaces': [{
             'network': 'global/networks/default',
             'accessConfigs': [
@@ -56,31 +58,43 @@ def create_instance(project, zone, instance_name, machine_type):
         }
     }
 
+    LOGGER.info('Creating instance with config=%s', config)
+    LOGGER.debug('Creating instance with config:\n%s', json.dumps(config, indent=2))
     opertion_dict = service.instances().insert(
-        project=project,
-        zone=zone,
-        body=config).execute()
+        project=project, zone=zone, body=config).execute()
     return opertion_dict
 
+
+logging.basicConfig(level=logging.DEBUG)
 
 project = ''
 zone = 'us-east1-b'
 instance_name = 'test-hello'
 machine_type = 'n1-standard-1'
-operation_dict = create_instance(project, zone, instance_name, machine_type)
-print(operation_dict)
 
-{'id': '8161888622962362325',
- 'insertTime': '2019-08-14T23:18:34.906-07:00',
- 'kind': 'compute#operation',
- 'name': 'operation-1565849913334-59021d7db1c98-1e849860-a2e7df08',
- 'operationType': 'insert',
- 'progress': 0,
- 'selfLink': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b/operations/operation-1565849913334-59021d7db1c98-1e849860-a2e7df08',
- 'startTime': '2019-08-14T23:18:34.910-07:00',
- 'status': 'RUNNING',
- 'targetId': '9070425509174265814',
- 'targetLink': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b/instances/test-hello',
- 'user': 'instance-service-account@hello-project.iam.gserviceaccount.com',
- 'zone': 'https://www.googleapis.com/compute/v1/projects/hello-project/zones/us-east1-b'
- }
+
+def run_create_instance():
+
+    from cloud_compute.gcp.gcp_osimage import get_centos7_public_image
+    source_image = get_centos7_public_image()['selfLink']
+
+    from cloud_compute.gcp.gcp_instance_disk import create_config_bootdisk_from_image
+    boot_disk_name = '{}-boot'.format(instance_name)
+    boot_disk = create_config_bootdisk_from_image(source_image, boot_disk_name)
+    disk_list = [boot_disk]
+    operation_dict = create_instance(project, zone, instance_name, machine_type, disk_list)
+    print(operation_dict)
+
+
+def run_check_operation(operation_name, service=None):
+    _service = service or get_compute_engine_service()
+    response = _service.zoneOperations().get(
+        project=project,
+        zone=zone,
+        operation=operation_name).execute()
+    print(response)
+
+
+# run_create_instance()
+# run_check_operation('operation-1565931022636-59034ba58d442-6475c7c6-51e9def7')
+delete_instance(project, zone, 'test-hello')
