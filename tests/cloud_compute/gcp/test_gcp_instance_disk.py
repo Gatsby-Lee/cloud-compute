@@ -3,11 +3,11 @@ import pytest
 from cloud_compute.gcp.gcp_instance_disk import *
 
 
-def test_create_config_pd_bootdisk_from_image_with_default_value():
+def test_create_config_persistent_bootdisk_from_image_with_default_value():
 
     sourceImage = 'myimage'
     diskName = 'mydisk'
-    ret_config = create_config_pd_bootdisk_from_image(
+    ret_config = create_config_persistent_bootdisk_from_image(
         sourceImage, diskName
     )
 
@@ -28,13 +28,13 @@ def test_create_config_pd_bootdisk_from_image_with_default_value():
     assert ret_config == expected_config
 
 
-def test_create_config_pd_bootdisk_from_image_with_arguments():
+def test_create_config_persistent_bootdisk_from_image_with_arguments():
 
     sourceImage = 'myimage'
     diskName = 'mydisk'
     diskSizeGb = 30
     autoDelete = False
-    ret_config = create_config_pd_bootdisk_from_image(
+    ret_config = create_config_persistent_bootdisk_from_image(
         sourceImage, diskName, diskSizeGb, autoDelete,
         diskType=DiskType.PD_SSD
     )
@@ -56,24 +56,24 @@ def test_create_config_pd_bootdisk_from_image_with_arguments():
     assert ret_config == expected_config
 
 
-def test_create_config_pd_bootdisk_from_image_with_invalid_type_arguments():
+def test_create_config_persistent_bootdisk_from_image_with_invalid_type_arguments():
 
     with pytest.raises(AssertionError):
-        create_config_pd_bootdisk_from_image(1, '1')
+        create_config_persistent_bootdisk_from_image(1, '1')
     with pytest.raises(AssertionError):
-        create_config_pd_bootdisk_from_image('1', 1)
-    assert create_config_pd_bootdisk_from_image('1', '1')
+        create_config_persistent_bootdisk_from_image('1', 1)
+    assert create_config_persistent_bootdisk_from_image('1', '1')
 
     with pytest.raises(AssertionError):
-        create_config_pd_bootdisk_from_image('1', '1', '10')
-    assert create_config_pd_bootdisk_from_image('1', '1', 10)
+        create_config_persistent_bootdisk_from_image('1', '1', '10')
+    assert create_config_persistent_bootdisk_from_image('1', '1', 10)
 
     with pytest.raises(AssertionError):
-        create_config_pd_bootdisk_from_image('1', '1', '10', 'True')
-    assert create_config_pd_bootdisk_from_image('1', '1', 10, True)
+        create_config_persistent_bootdisk_from_image('1', '1', '10', 'True')
+    assert create_config_persistent_bootdisk_from_image('1', '1', 10, True)
 
     with pytest.raises(AssertionError):
-        create_config_pd_bootdisk_from_image('1', '1', '10', True,
-                                             diskType=DiskInerface.SCSI)
-    assert create_config_pd_bootdisk_from_image('1', '1', 10, True,
-                                                diskType=DiskType.PD_STANDARD)
+        create_config_persistent_bootdisk_from_image('1', '1', '10', True,
+                                                     diskType=DiskInerface.SCSI)
+    assert create_config_persistent_bootdisk_from_image('1', '1', 10, True,
+                                                        diskType=DiskType.PD_STANDARD)

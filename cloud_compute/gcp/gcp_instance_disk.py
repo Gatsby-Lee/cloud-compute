@@ -31,7 +31,7 @@ class DiskType(Enum):
     LOCAL_SSD = 'local-ssd'
 
 
-def create_config_pd_bootdisk_from_image(
+def create_config_persistent_bootdisk_from_image(
     sourceImage,
     diskName,
     diskSizeGb=10,
@@ -39,7 +39,7 @@ def create_config_pd_bootdisk_from_image(
     diskType=DiskType.PD_STANDARD
 ):
     """
-    create config for bootdisk from image
+    create config for persistent bootdisk from image
     """
     assert type(sourceImage) is str
     assert type(diskName) is str
@@ -60,7 +60,36 @@ def create_config_pd_bootdisk_from_image(
             'DiskType': diskType.value
         }
     }
+    return config
 
+
+def create_config_persistent_disk(
+    diskName,
+    diskSizeGb,
+    autoDelete=True,
+    diskType=DiskType.PD_STANDARD
+):
+    """
+    create config for persistent disk
+    """
+
+    assert type(diskName) is str
+    assert type(diskSizeGb) is int
+    assert type(autoDelete) is bool
+    assert type(diskType) is DiskType
+
+    config = {
+        'boot': False,
+        'autoDelete': autoDelete,
+        'type': DiskLifeType.PERSISTENT.value,
+        'mode': DiskMode.READ_WRITE.value,
+        'interface': DiskInerface.SCSI.value,
+        'initializeParams': {
+            'diskName': diskName,
+            'diskSizeGb': diskSizeGb,
+            'DiskType': diskType.value
+        }
+    }
     return config
 
 
@@ -69,5 +98,6 @@ __all__ = (
     'DiskMode',
     'DiskInerface',
     'DiskType',
-    'create_config_pd_bootdisk_from_image',
+    'create_config_persistent_bootdisk_from_image',
+    'create_config_persistent_disk',
 )

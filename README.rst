@@ -19,6 +19,7 @@ Disks
 -----
 
 * https://cloud.google.com/compute/docs/disks/
+* https://cloud.google.com/compute/docs/disks/performance
 
 OS Images
 ---------
