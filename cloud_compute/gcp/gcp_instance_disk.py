@@ -6,6 +6,8 @@
 """
 from enum import Enum
 
+FORMAT_DISKTYPE = '/projects/%(project)s/zones/%(zone)s/diskTypes/%(diskType)s'
+
 
 class DiskLifeType(Enum):
     PERSISTENT = 'PERSISTENT'  # default
@@ -32,6 +34,8 @@ class DiskType(Enum):
 
 
 def create_config_persistent_bootdisk_from_image(
+    project,
+    zone,
     sourceImage,
     diskName,
     diskSizeGb=10,
@@ -41,29 +45,38 @@ def create_config_persistent_bootdisk_from_image(
     """
     create config for persistent bootdisk from image
     """
+    assert type(project) is str
+    assert type(zone) is str
     assert type(sourceImage) is str
     assert type(diskName) is str
     assert type(diskSizeGb) is int
     assert type(autoDelete) is bool
     assert type(diskType) is DiskType
 
+    _diskType = FORMAT_DISKTYPE % {
+        'project': project,
+        'zone': zone,
+        'diskType': diskType.value
+    }
+
     config = {
         'boot': True,
         'autoDelete': autoDelete,
-        'type': DiskLifeType.PERSISTENT.value,
-        'mode': DiskMode.READ_WRITE.value,
         'interface': DiskInerface.SCSI.value,
         'initializeParams': {
-            'sourceImage': sourceImage,
             'diskName': diskName,
             'diskSizeGb': diskSizeGb,
-            'DiskType': diskType.value
+            'diskType': _diskType,
+            'mode': DiskMode.READ_WRITE.value,
+            'sourceImage': sourceImage,
         }
     }
     return config
 
 
 def create_config_persistent_disk(
+    project,
+    zone,
     diskName,
     diskSizeGb,
     autoDelete=True,
@@ -72,22 +85,28 @@ def create_config_persistent_disk(
     """
     create config for persistent disk
     """
-
+    assert type(project) is str
+    assert type(zone) is str
     assert type(diskName) is str
     assert type(diskSizeGb) is int
     assert type(autoDelete) is bool
     assert type(diskType) is DiskType
 
+    _diskType = FORMAT_DISKTYPE % {
+        'project': project,
+        'zone': zone,
+        'diskType': diskType.value
+    }
+
     config = {
         'boot': False,
         'autoDelete': autoDelete,
-        'type': DiskLifeType.PERSISTENT.value,
-        'mode': DiskMode.READ_WRITE.value,
         'interface': DiskInerface.SCSI.value,
         'initializeParams': {
             'diskName': diskName,
             'diskSizeGb': diskSizeGb,
-            'DiskType': diskType.value
+            'diskType': _diskType,
+            'mode': DiskMode.READ_WRITE.value,
         }
     }
     return config

@@ -7,9 +7,27 @@ Simple API creating Google ComputeEngine or AWS EC2
 Troubleshooting
 ================
 
-Unable to Launch Instance - `The user does not have access to service account`
+Unable to Launch Instance
+-------------------------
+
+The user does not have access to service account
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * service account needs new Role: Service Account > Servic Account User
+
+
+Unable to SSH to Instance
+-------------------------
+
+From GCP Cloud Console Browser
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+First, Check if Instance is launched property. It can be checked `Serial port 1 (console)`
+
+Second, If instance is launched propertly, check SSH related `Firewall`
+
+GCP Cloud Console IP is different from your computer IP.
+
 
 
 References
