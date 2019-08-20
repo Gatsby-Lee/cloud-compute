@@ -32,9 +32,14 @@ def get_centos6_public_image(service=None):
     return _get_image('centos-cloud', 'centos-6', service=service)
 
 
+def get_debian9_public_image(service=None):
+    return _get_image('debian-cloud', 'debian-9', service=service)
+
+
 __all__ = (
     'get_centos7_public_image',
     'get_centos6_public_image',
     'get_centos7_public_image_with_shield',
     'get_centos6_public_image_with_shield',
+    'get_debian9_public_image',
 )

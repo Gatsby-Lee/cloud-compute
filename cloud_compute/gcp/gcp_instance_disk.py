@@ -62,12 +62,10 @@ def create_config_persistent_bootdisk_from_image(
     config = {
         'boot': True,
         'autoDelete': autoDelete,
-        'interface': DiskInerface.SCSI.value,
         'initializeParams': {
             'diskName': diskName,
             'diskSizeGb': diskSizeGb,
             'diskType': _diskType,
-            'mode': DiskMode.READ_WRITE.value,
             'sourceImage': sourceImage,
         }
     }
@@ -101,12 +99,10 @@ def create_config_persistent_disk(
     config = {
         'boot': False,
         'autoDelete': autoDelete,
-        'interface': DiskInerface.SCSI.value,
         'initializeParams': {
             'diskName': diskName,
             'diskSizeGb': diskSizeGb,
             'diskType': _diskType,
-            'mode': DiskMode.READ_WRITE.value,
         }
     }
     return config
