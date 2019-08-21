@@ -10,7 +10,12 @@ def get_operation_status(project, zone, operation_name, service=None):
     return response
 
 
+def get_region_from_zone(zone):
+    return zone[:zone.rindex('-')]
+
+
 __all__ = (
     'get_compute_engine_service',
     'get_operation_status',
+    'get_region_from_zone',
 )

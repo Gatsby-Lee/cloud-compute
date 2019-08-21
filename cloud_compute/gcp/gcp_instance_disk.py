@@ -6,7 +6,7 @@
 """
 from enum import Enum
 
-FORMAT_DISKTYPE = '/projects/%(project)s/zones/%(zone)s/diskTypes/%(diskType)s'
+FORMAT_DISKTYPE = 'projects/%(project)s/zones/%(zone)s/diskTypes/%(diskType)s'
 
 
 class DiskLifeType(Enum):
