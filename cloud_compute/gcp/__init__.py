@@ -1,4 +1,5 @@
 import copy
+import collections
 
 from cloud_compute.gcp.gcp_service import *
 
@@ -18,7 +19,7 @@ def get_region_from_zone(zone):
 
 class Tags(object):
 
-    __slots__ = ('_tags')
+    __slots__ = ('_tags',)
 
     def __init__(self, *tags):
         self._tags = set(tags) or set()
@@ -35,7 +36,7 @@ class Tags(object):
 
 
 class Metadatas(object):
-    __slots__ = ('_metadatas')
+    __slots__ = ('_metadatas',)
 
     def __init__(self, **kwargs):
         self._metadatas = {}
@@ -54,6 +55,34 @@ class Metadatas(object):
 
     def remove(self, key):
         del self._metadatas[key]
+
+
+class ServiceAccounts(object):
+    __slots__ = ('_accounts', 'MAX_ACCOUNTS')
+
+    MAX_ACCOUNTS = 1
+
+    def __init__(self):
+        self._accounts = collections.defaultdict(set)
+
+    def add(self, email, *scopes):
+        if email not in self._accounts and len(self._accounts) == self.MAX_ACCOUNTS:
+            raise Exception('Only one service account per VM instance is supported')
+            # Only one service account per VM instance is supported.
+        for s in scopes:
+            self._accounts[email].add(s)
+
+    def get(self):
+        r = []
+        for k in self._accounts:
+            r.append({'email': k, 'scopes': list(self._accounts[k])})
+        return r
+
+    def remove_email(self, email):
+        del self._accounts[email]
+
+    def remove_scope(self, email, scope):
+        self._accounts[email].remove(scope)
 
 
 __all__ = (

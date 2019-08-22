@@ -40,6 +40,12 @@ def test_metadata():
     m.remove('name')
     assert m.get() == [{'key': 'env', 'value': 'prod'}]
 
+    # test remove key - when key doesn't exists
+    m = Metadatas(name='mlee', env='prod')
+    m.remove('name')
+    with pytest.raises(KeyError):
+        m.remove('name')
+
     # test - modifying existing key's value
     m = Metadatas(name='mlee', env='prod')
     m.add('name', 'mlee2')
