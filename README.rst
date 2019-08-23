@@ -4,6 +4,55 @@ Cloud Compute
 Simple API creating Google ComputeEngine or AWS EC2
 
 
+SSH Connect to Instance
+=======================
+
+SSH Connect with gcloud
+-----------------------
+
+ref: https://cloud.google.com/compute/docs/instances/connecting-to-instance
+
+.. code-block:: bash
+
+    # gcloud compute ssh --project [PROJECT_ID] --zone [ZONE] [INSTANCE_NAME]
+    gcloud compute ssh
+
+SSH Connect with OS Login
+-------------------------
+
+ref:
+
+* https://cloud.google.com/compute/docs/instances/connecting-advanced
+* https://cloud.google.com/compute/docs/instances/managing-instance-access
+
+
+Set enable-oslogin as key, TRUE as value
+
+* Project-wide: Compute Engine > Metadata
+* Instance: Add metadata either while creating or running instance
+
+
+
+SSH Connect from Browser
+--------------------
+
+ref: https://cloud.google.com/compute/docs/ssh-in-browser
+
+
+Source IP addresses for browser-based SSH sessions are dynamically allocated by GCP Console
+and can vary from session to session.
+
+For the feature to work, you must allow connections either from any IP address
+or from Google's IP address range which you can retrieve using `public SPF records <https://support.google.com/a/answer/60764>`_
+
+
+.. code-block:: bash
+
+    nslookup -q=TXT _netblocks.google.com 8.8.8.8
+    nslookup -q=TXT _netblocks2.google.com 8.8.8.8
+    nslookup -q=TXT _netblocks3.google.com 8.8.8.8
+
+
 Troubleshooting
 ================
 
@@ -13,20 +62,7 @@ Unable to Launch Instance
 The user does not have access to service account
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* service account needs new Role: Service Account > Servic Account User
-
-
-Unable to SSH to Instance
--------------------------
-
-From GCP Cloud Console Browser
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-First, Check if Instance is launched property. It can be checked `Serial port 1 (console)`
-
-Second, If instance is launched propertly, check SSH related `Firewall`
-
-GCP Cloud Console IP is different from your computer IP.
+* service account needs new Role: `Service Account > Servic Account User`
 
 
 

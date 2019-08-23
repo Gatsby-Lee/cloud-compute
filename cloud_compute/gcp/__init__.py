@@ -56,17 +56,24 @@ class Metadatas(object):
     def remove(self, key):
         del self._metadatas[key]
 
+    def enable_oslogin(self):
+        self.add('enable-oslogin', 'TRUE')
+
+    def disable_oslogin(self):
+        try:
+            self.remove('enable-oslogin')
+        except KeyError:
+            pass
+
 
 class ServiceAccounts(object):
-    __slots__ = ('_accounts', 'MAX_ACCOUNTS')
-
-    MAX_ACCOUNTS = 1
+    __slots__ = ('_accounts',)
 
     def __init__(self):
         self._accounts = collections.defaultdict(set)
 
     def add(self, email, *scopes):
-        if email not in self._accounts and len(self._accounts) == self.MAX_ACCOUNTS:
+        if email not in self._accounts and len(self._accounts) == 1:
             raise Exception('Only one service account per VM instance is supported')
             # Only one service account per VM instance is supported.
         for s in scopes:
