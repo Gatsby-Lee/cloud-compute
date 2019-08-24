@@ -78,8 +78,10 @@ Disks
 OS Images
 ---------
 
+Images with/without Shielded VM support
+
 * https://cloud.google.com/compute/docs/images
-* Images with/without Shielded VM support
+* https://cloud.google.com/container-optimized-os/docs/release-notes
 
 Google Python API Client References
 -----------------------------------
