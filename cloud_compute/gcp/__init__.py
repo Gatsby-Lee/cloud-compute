@@ -66,11 +66,28 @@ class Metadatas(object):
             pass
 
 
+# ref: https://cloud.google.com/sdk/gcloud/reference/alpha/compute/instances/set-scopes
+DEFAULT_SCOPES = (
+    'https://www.googleapis.com/auth/devstorage.read_only',
+    'https://www.googleapis.com/auth/logging.write',
+    'https://www.googleapis.com/auth/monitoring.write',
+    'https://www.googleapis.com/auth/pubsub',
+    'https://www.googleapis.com/auth/service.management.readonly',
+    'https://www.googleapis.com/auth/servicecontrol',
+    'https://www.googleapis.com/auth/trace.append',
+)
+
+
 class ServiceAccounts(object):
     __slots__ = ('_accounts',)
 
     def __init__(self):
         self._accounts = collections.defaultdict(set)
+
+    @staticmethod
+    def create_default():
+        s = ServiceAccounts()
+        s.add('email', *DEFAULT_SCOPES)
 
     def add(self, email, *scopes):
         if email not in self._accounts and len(self._accounts) == 1:
@@ -96,4 +113,7 @@ __all__ = (
     'get_compute_engine_service',
     'get_operation_status',
     'get_region_from_zone',
+    'Metadatas',
+    'ServiceAccounts',
+    'Tags',
 )
