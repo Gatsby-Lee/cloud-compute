@@ -105,7 +105,8 @@ class ServiceAccounts(object):
     @staticmethod
     def create_default():
         s = ServiceAccounts()
-        s.add('email', *DEFAULT_SCOPES)
+        s.add('default', *DEFAULT_SCOPES)
+        return s
 
     def add(self, email, *scopes):
         if email not in self._accounts and len(self._accounts) == 1:
