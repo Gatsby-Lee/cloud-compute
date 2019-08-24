@@ -28,11 +28,29 @@ class Tags(object):
         self._tags.add(tag_name)
 
     def get(self):
-        # one level deep copy (shallow copy), to avoid unexpected modification in _tags
+        # one level deep copy (shallow copy), to avoid unexpected modification
         return list(self._tags)
 
     def remove(self, tag_name):
         self._tags.remove(tag_name)
+
+
+class Labels(object):
+
+    __slots__ = ('_labels',)
+
+    def __init__(self, **labels):
+        self._labels = labels or dict()
+
+    def add(self, label_key, label_value):
+        self._labels[label_key] = label_value
+
+    def get(self):
+        # one level deep copy (shallow copy), to avoid unexpected modification
+        return dict(self._labels)
+
+    def remove(self, label_key):
+        del self._labels[label_key]
 
 
 class Metadatas(object):
@@ -113,6 +131,7 @@ __all__ = (
     'get_compute_engine_service',
     'get_operation_status',
     'get_region_from_zone',
+    'Labels',
     'Metadatas',
     'ServiceAccounts',
     'Tags',
