@@ -26,27 +26,3 @@ def test_tag():
     # test exception when removing non-existing tag
     with pytest.raises(KeyError):
         t.remove('cde')
-
-
-def test_metadata():
-    from cloud_compute.gcp import Metadatas
-
-    # test kwargs
-    m = Metadatas(name='mlee', env='prod')
-    assert m.get() == [{'key': 'name', 'value': 'mlee'}, {'key': 'env', 'value': 'prod'}]
-
-    # test remove key
-    m = Metadatas(name='mlee', env='prod')
-    m.remove('name')
-    assert m.get() == [{'key': 'env', 'value': 'prod'}]
-
-    # test remove key - when key doesn't exists
-    m = Metadatas(name='mlee', env='prod')
-    m.remove('name')
-    with pytest.raises(KeyError):
-        m.remove('name')
-
-    # test - modifying existing key's value
-    m = Metadatas(name='mlee', env='prod')
-    m.add('name', 'mlee2')
-    assert m.get() == [{'key': 'name', 'value': 'mlee2'}, {'key': 'env', 'value': 'prod'}]

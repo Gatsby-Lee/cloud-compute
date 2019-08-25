@@ -3,6 +3,7 @@ import collections
 
 from cloud_compute.gcp.gcp_service import get_compute_engine_service
 from cloud_compute.gcp.gcp_service_account import ServiceAccounts
+from cloud_compute.gcp.gcp_metadata import Metadatas
 
 
 def get_operation_status(project, zone, operation_name, service=None):
@@ -50,37 +51,6 @@ class Labels(object):
 
     def remove(self, label_key):
         del self._labels[label_key]
-
-
-class Metadatas(object):
-    __slots__ = ('_metadatas',)
-
-    def __init__(self, **kwargs):
-        self._metadatas = {}
-        if kwargs:
-            for k in kwargs:
-                self._metadatas[k] = kwargs[k]
-
-    def add(self, key, value):
-        self._metadatas[key] = value
-
-    def get(self):
-        r = []
-        for k in self._metadatas:
-            r.append({'key': k, 'value': self._metadatas[k]})
-        return r
-
-    def remove(self, key):
-        del self._metadatas[key]
-
-    def enable_oslogin(self):
-        self.add('enable-oslogin', 'TRUE')
-
-    def disable_oslogin(self):
-        try:
-            self.remove('enable-oslogin')
-        except KeyError:
-            pass
 
 
 __all__ = (

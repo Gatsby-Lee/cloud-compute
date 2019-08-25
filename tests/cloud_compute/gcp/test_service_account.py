@@ -7,6 +7,11 @@ def test_init():
     ServiceAccounts()
 
 
+def test_default_init():
+    s = ServiceAccounts()
+    assert s.get() == []
+
+
 def test_create_default():
     s = ServiceAccounts.create_default()
     config = s.get()
@@ -62,7 +67,20 @@ def test_remove_email():
     assert len(config) == len(expected_config)
 
 
-def test_add_more_than_one_email():
+def test_remove_email_exception():
+    s = ServiceAccounts()
+    with pytest.raises(KeyError):
+        s.remove_email('default')
+
+
+def test_remove_scope_exception():
+    s = ServiceAccounts()
+    s.add('default', 'https://www.googleapis.com/auth/logging.write')
+    with pytest.raises(KeyError):
+        s.remove_scope('default', 'https://www.googleapis.com/auth/pubsub')
+
+
+def test_add_more_than_one_email_exception():
     s = ServiceAccounts()
     s.add('default',
           'https://www.googleapis.com/auth/logging.write')
