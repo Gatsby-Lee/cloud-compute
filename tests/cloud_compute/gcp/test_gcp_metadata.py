@@ -5,7 +5,7 @@
 
 import pytest
 
-from cloud_compute.gcp import Metadatas
+from cloud_compute.gcp.gce import Metadatas
 
 
 def test_init():

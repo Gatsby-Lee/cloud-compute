@@ -7,7 +7,7 @@
 
 import logging
 
-from cloud_compute.gcp import get_compute_engine_service
+from cloud_compute.gcp.gcp_service import get_compute_engine_service
 
 
 LOGGER = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 import pytest
 
-from cloud_compute.gcp import ServiceAccounts
+from cloud_compute.gcp.gce import ServiceAccounts
 
 
 def test_init():

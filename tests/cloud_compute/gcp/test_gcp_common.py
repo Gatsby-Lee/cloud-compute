@@ -2,7 +2,7 @@ import pytest
 
 
 def test_tag():
-    from cloud_compute.gcp import Tags
+    from cloud_compute.gcp.gce import Tags
 
     # basic test
     t = Tags()
