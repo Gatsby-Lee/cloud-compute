@@ -1,7 +1,10 @@
 import copy
 import collections
 
-from cloud_compute.gcp.gcp_service import get_compute_engine_service
+from cloud_compute.gcp.gcp_service import (
+    get_compute_engine_service,
+    get_dataproc_service,
+)
 from cloud_compute.gcp.gcp_service_account import ServiceAccounts
 from cloud_compute.gcp.gcp_metadata import Metadatas
 
@@ -55,6 +58,7 @@ class Labels(object):
 
 __all__ = (
     'get_compute_engine_service',
+    'get_dataproc_service',
     'get_operation_status',
     'get_region_from_zone',
     'Labels',

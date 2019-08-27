@@ -9,11 +9,18 @@ import googleapiclient.discovery
 
 
 def get_compute_engine_service():
-    compute_engine_service = googleapiclient.discovery.build(
+    service = googleapiclient.discovery.build(
         'compute', 'v1', cache_discovery=False)
-    return compute_engine_service
+    return service
+
+
+def get_dataproc_service():
+    service = googleapiclient.discovery.build(
+        'dataproc', 'v1', cache_discovery=False)
+    return service
 
 
 __all__ = (
     'get_compute_engine_service',
+    'get_dataproc_service',
 )
